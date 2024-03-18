@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 
-
-
 bool contains(const std::vector<std::string>& arr, const std::string& element)
 {
     for (const auto& item : arr)
@@ -31,6 +29,25 @@ std::vector<std::string> splitCSVLine(const std::string &line)
     return parts;
 }
 
+float getStockVal(const std::string& stockChoice, int dateNumber)
+{
+    std::string fileName = stockChoice + ".csv";
+    
+    std::string line; 
+    std::fstream file(fileName);
+
+    for (int lineNumber = 0; lineNumber<=dateNumber; ++lineNumber)
+    {
+        std::getline(file, line);
+    }
+
+    std::vector<std::string> parts = splitCSVLine(line);
+    std::cout << "The price is : " << parts[1] << std::endl;
+
+    float stockVal = std::stof(parts[1]);
+
+    return stockVal;
+}
 
 std::string command()
 {
@@ -40,67 +57,76 @@ std::string command()
     return commandAction;
 }
 
-float getStockVal(const std::string& stockChoice, std::vector<std::string>& userProfile)
+void buy(float& money, std::vector<std::string>& userProfile, const std::vector<std::string>& stockChoices, int dateNumber)
 {
-    std::string fileName;
-    fileName = stockChoice + ".csv";
+    std::string stockChoice;
+    std::cout << "Which stock would you like to buy?\n";
+    std::cin >> stockChoice;
+    if (contains(stockChoices,stockChoice))
+    {
+        float stockVal = getStockVal(stockChoice, dateNumber);
+        money = money - stockVal;
+        std::cout << "$" << money << "\n";
+        userProfile.push_back(stockChoice);
+    }
+    else
+    {
+        std::cout << "Not a stock option! ";
+    }
+}
+
+void next(int dateNumber, std::string stockChoice)
+{
+    std::string fileName = stockChoice + ".csv";
     
     std::string line; 
     std::fstream file(fileName);
-    std::getline(file, line);
-    std::getline(file, line);
-
-    std::vector<std::string>parts;
-    parts = splitCSVLine(line);
-    std::cout << "The first price is : " << parts[1] << std::endl;
-
-    float stockVal = std::stof(parts[1]);
-
-    return stockVal;
+    if (dateNumber == 1)
+    {
+        std::getline(file, line);
+    }
+    else
+    {
+        for (int lineNumber = 0; lineNumber<=dateNumber; ++lineNumber)
+        {
+            std::getline(file, line);
+        }
+    }
+    
+    std::vector<std::string> parts = splitCSVLine(line);
+    std::cout << "The Date Now is : " << parts[0] << std::endl;
 }
 
-void buy(float& money, std::vector<std::string>& userProfile, const std::vector<std::string>& stockChoices)
+void check(int dateNumber, int money, std::vector<int>&userProfile)
 {
-            std::string stockChoice;
-            std::cout << "`Which stock would you like to buy?\n";
-            std::cin >> stockChoice;
-            if (contains(stockChoices,stockChoice))
-            {
-                float stockVal;
-                stockVal = getStockVal(stockChoice,userProfile);
-                money = money - stockVal;
-                std::cout << "$" << money << "\n";
-                userProfile.push_back(stockChoice);
-            }
-            else
-            {
-                std::cout << "Not a stock option! ";
-            }
-}
 
+}
 int main() 
 {
     float money = 100.00;
-    std::cout << "Day is 2013-02-08 \n Your Bank Account is at $"<< money << "\n";
-
+    std::string date = "2013-02-08";
+    int dateNumber = 1;
+    std::cout << "Day is  " << date << "\n Your Bank Account is at $"<< money << "\n";
+    
+    static int currentLineNumber = 0;
     std::vector<std::string> userProfile;
     std::vector<std::string> stockChoices = {"A"};
-    std::string commandA;
 
     while (true)
     {
-        commandA  = command();
+        std::string commandA  = command();
         if (commandA == "check")
         {
             std::cout <<"$"<<money<<"\n";
         }
         else if (commandA == "next")
         {
-            std::cout << "next!\n";
+            dateNumber = dateNumber + 1;
+            next(dateNumber,"A");
         }
         else if (commandA == "buy")
         {
-            buy(money, userProfile, stockChoices);
+            buy(money, userProfile, stockChoices, dateNumber);
         }
         else if (commandA == "sell")
         {
@@ -121,15 +147,3 @@ int main()
         }
     }
 }
-
-/*
-    std::string stock;
-    std::string csvFile;
-    stock = "A";
-    csvFile = ".csv";
-
-    stock = stock + csvFile;
-
-    int answer = checkFile(stock);
-    std::cout << answer << "\n" << std::endl;
-*/
