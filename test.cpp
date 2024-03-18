@@ -4,17 +4,33 @@
 #include <string>
 #include <vector>
 
-bool contains(const std::string arr[], int size, const std::string& element)
+
+
+bool contains(const std::vector<std::string>& arr, const std::string& element)
 {
-    for (int i = 0; i < size; ++i)
+    for (const auto& item : arr)
     {
-        if (arr[i] == element)
+        if (item == element)
         {
             return true;
         }
     }
     return false;
 }
+
+std::vector<std::string> splitCSVLine(const std::string &line)
+{
+    std::vector<std::string>parts;
+    std::stringstream lineStream(line);
+
+    std::string part;
+    while (getline(lineStream, part, ','))
+    {
+        parts.push_back(part);
+    }
+    return parts;
+}
+
 
 std::string command()
 {
@@ -24,29 +40,51 @@ std::string command()
     return commandAction;
 }
 
-bool checkFile(const std::string&fileName)
+float getStockVal(const std::string& stockChoice, std::vector<std::string>& userProfile)
 {
-    std::ifstream file(fileName);
-    if (!file.is_open()) 
-    {
-        std::cerr << "Error opening file" << std::endl;
-        return false;
-    }
-    else
-    {
-        return true;
-    }
+    std::string fileName;
+    fileName = stockChoice + ".csv";
+    
+    std::string line; 
+    std::fstream file(fileName);
+    std::getline(file, line);
+    std::getline(file, line);
+
+    std::vector<std::string>parts;
+    parts = splitCSVLine(line);
+    std::cout << "The first price is : " << parts[1] << std::endl;
+
+    float stockVal = std::stof(parts[1]);
+
+    return stockVal;
+}
+
+void buy(float& money, std::vector<std::string>& userProfile, const std::vector<std::string>& stockChoices)
+{
+            std::string stockChoice;
+            std::cout << "`Which stock would you like to buy?\n";
+            std::cin >> stockChoice;
+            if (contains(stockChoices,stockChoice))
+            {
+                float stockVal;
+                stockVal = getStockVal(stockChoice,userProfile);
+                money = money - stockVal;
+                std::cout << "$" << money << "\n";
+                userProfile.push_back(stockChoice);
+            }
+            else
+            {
+                std::cout << "Not a stock option! ";
+            }
 }
 
 int main() 
 {
     float money = 100.00;
-    std::cout << "Day is 2013-02-08 \nYour Bank Account is at $"<< money << "\n";
+    std::cout << "Day is 2013-02-08 \n Your Bank Account is at $"<< money << "\n";
 
     std::vector<std::string> userProfile;
-    std::string stockChoices[1];
-    stockChoices[0] = "A";
-
+    std::vector<std::string> stockChoices = {"A"};
     std::string commandA;
 
     while (true)
@@ -62,14 +100,7 @@ int main()
         }
         else if (commandA == "buy")
         {
-            std::string stockChoice;
-            std::cout << "Which stock would you like to buy?\n";
-            std::cin >> stockChoice;
-            if (contains(stockChoices, 1, stockChoice))
-            {
-                money = money - 10;
-                std::cout << money << "\n";
-            }
+            buy(money, userProfile, stockChoices);
         }
         else if (commandA == "sell")
         {
@@ -77,16 +108,18 @@ int main()
         }
         else if (commandA == "profile")
         {
-            std::cout << "profile\n";
+                std::cout << "Profile: ";
+                for(const std::string& element : userProfile) 
+                {
+                    std::cout << element << " | ";
+                }
+                std::cout << "\n";
         }
         else
         {
             std::cout << "Not an option\n";
         }
     }
-
-
-
 }
 
 /*
