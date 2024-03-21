@@ -136,14 +136,14 @@ void check(int dateNumber, int money, std::vector<int>&userProfile)
 }
 int main() 
 {
-    float money = 100.00;
+    float money = 1000.00;
     std::string date = "2013-02-08";
     int dateNumber = 1;
     std::cout << "Day is  " << date << "\n Your Bank Account is at $"<< money << "\n";
     
     static int currentLineNumber = 0;
     std::vector<std::string> userProfile;
-    std::vector<std::string> stockChoices = {"A"};
+    std::vector<std::string> stockChoices = {"A","AAPL"};
 
     while (true)
     {
@@ -166,7 +166,6 @@ int main()
         }
         else if (commandA == "sell")
         {
-            std::cout << "sell!\n";
             sell(money, userProfile, stockChoices, dateNumber);
         }
         else if (commandA == "profile")
