@@ -49,6 +49,35 @@ float getStockVal(const std::string& stockChoice, int dateNumber)
     return stockVal;
 }
 
+void sell(float& money, std::vector<std::string>& userProfile, const std::vector<std::string>& stockChoices, int dateNumber)
+{
+    if (userProfile.empty())
+    {
+        std::cout << "You don't own any stocks to sell.\n";
+        return;
+    }
+
+    std::string stockChoice;
+    std::cout << "Which stock would you like to sell?\n";
+    std::cin >> stockChoice;
+
+    // Check if the user owns the stock
+    auto it = std::find(userProfile.begin(), userProfile.end(), stockChoice);
+    if (it != userProfile.end())
+    {
+        // User owns the stock, proceed with selling
+        float stockVal = getStockVal(stockChoice, dateNumber);
+        money += stockVal; // Increase user's money by the stock value
+        userProfile.erase(it); // Remove the stock from the user's profile
+        std::cout << "Sold " << stockChoice << " for $" << stockVal << ". Your balance is now $" << money << ".\n";
+    }
+    else
+    {
+        std::cout << "You do not own " << stockChoice << " stock.\n";
+    }
+}
+
+
 std::string command()
 {
     std:: string commandAction;
@@ -124,7 +153,7 @@ int main()
             float profileVal = findProfileVal(userProfile, dateNumber);
             std::cout <<"$"<<money<<" left \n";
             std::cout <<"Profile Value: $"<< profileVal <<"\n";
-            std::cout <<"Total :" << profileVal + money;
+            std::cout <<"Total : $"<< profileVal + money <<"\n";
         }
         else if (commandA == "next")
         {
@@ -138,6 +167,7 @@ int main()
         else if (commandA == "sell")
         {
             std::cout << "sell!\n";
+            sell(money, userProfile, stockChoices, dateNumber);
         }
         else if (commandA == "profile")
         {
