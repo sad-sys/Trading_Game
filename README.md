@@ -12,7 +12,7 @@ This project is a console-based stock trading simulation game written in C++. It
 - **Portfolio Management**: Keep track of the stocks you own and their values.
 - **Historical Data Simulation**: Use real historical stock prices for simulation.
 - **Visualization**: Visualize the portfolio's value changes over time in a simple text-based graph.
-- **Command Interface**: Use commands like `buy`, `sell`, `check`, `next`, and `profile` to interact with the game.
+- **Command Interface**: Use commands like `buy`, `sell`g, `check`, `next`, and `profile` to interact with the game.
 
 ## Skills Demonstrated
 
@@ -31,7 +31,7 @@ This project is a console-based stock trading simulation game written in C++. It
 3. Compile the code. For example, using g++:
 
    ```bash
-   g++ -o tradingGame tradingGame.cpp
+   g++ -o tradingGame test.cpp
    ```
 
 4. Run the executable:
