@@ -1,7 +1,3 @@
-Creating a README file for your project is crucial for explaining what it does, how it works, and what technologies or skills are involved. Here's an example README in Markdown format for your C++ trading game project:
-
----
-
 # C++ Stock Trading Game
 
 This project is a console-based stock trading simulation game written in C++. It allows users to simulate buying and selling stocks based on historical data, manage a portfolio, and visualize their portfolio's value over time.
@@ -53,7 +49,3 @@ This project is a console-based stock trading simulation game written in C++. It
 ## Contributions
 
 Feel free to fork this project, make changes, and submit pull requests. We're always looking for ways to improve the simulation and add new features!
-
----
-
-Remember to replace placeholders like `[stock symbol]` with actual examples or more detailed explanations if necessary. This README provides a comprehensive overview of your project, its features, and how to interact with it, catering to both users and potential contributors.
